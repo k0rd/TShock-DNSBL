@@ -65,20 +65,25 @@ namespace TShock_DNSBL
 
         public void OnConnect(int pID, HandledEventArgs e)
         {
-            string[] blProvider = new string[] {GetDNSBLServer()};
-
+            string[] blProvider = new string[] {GetDNSBLServer()};       
            CheckProxy m_checker= new CheckProxy(TShock.Players[pID].IP,blProvider);
-        
-            if (m_checker.IPAddr.Valid)
+
+            if (!CheckWhitelist(TShock.Players[pID].IP))
             {
-                if (m_checker.BlackList.IsListed)
+                if (m_checker.IPAddr.Valid)
                 {
-                    TShock.Utils.ForceKick(TShock.Players[pID], string.Format("You are listed on the blacklist at {0}.", m_checker.BlackList.VerifiedOnServer));
-                    e.Handled = true;
-                    return;
+                    if (m_checker.BlackList.IsListed)
+                    {
+                        TShock.Utils.ForceKick(TShock.Players[pID],
+                                               string.Format("You are listed on the blacklist at {0}.",
+                                                             m_checker.BlackList.VerifiedOnServer));
+                        Log.ConsoleInfo(string.Format("{0} was found on the whitelist at {1}", TShock.Players[pID],
+                                                      m_checker.BlackList.VerifiedOnServer));
+                        e.Handled = true;
+                        return;
+                    }
                 }
             }
-
 
         }
 
