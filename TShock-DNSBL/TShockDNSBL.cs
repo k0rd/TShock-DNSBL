@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Net;
@@ -18,7 +19,7 @@ namespace TShock_DNSBL
         }
         internal static string BlListPath
         {
-            get { return Path.Combine(TShock.SavePath, "dnsbl.server"); }
+            get { return Path.Combine(TShock.SavePath, "dnsbl-servers.txt"); }
         }
         public Dnsbl(Main game)
             : base(game)
@@ -65,9 +66,9 @@ namespace TShock_DNSBL
 
         public void OnConnect(int pID, HandledEventArgs e)
         {
-            string[] blProvider = new string[] {GetDNSBLServer()};       
-           CheckProxy m_checker= new CheckProxy(TShock.Players[pID].IP,blProvider);
 
+            string[] blProvider = GetDNSBLServer().ToArray();       
+            CheckProxy m_checker= new CheckProxy(TShock.Players[pID].IP,blProvider);
             if (!CheckWhitelist(TShock.Players[pID].IP))
             {
                 if (m_checker.IPAddr.Valid)
@@ -87,14 +88,23 @@ namespace TShock_DNSBL
 
         }
 
-        public static string GetDNSBLServer()
+        public static List<string> GetDNSBLServer()
         {
+            List<string> bllist = new List<string>();
             FileTools.CreateIfNot(BlListPath, "xbl.spamhaus.org");
             using (var tr = new StreamReader(BlListPath))
             {
-                string bllist = tr.ReadLine();
-                return bllist;
+                string tmp  = tr.ReadToEnd();
+                foreach (var line in tmp.Split(Environment.NewLine.ToCharArray()))
+                {
+                    if (string.IsNullOrWhiteSpace(line))
+                        continue;
+                    bllist.Add(line);
+                }
+
+                
             }
+            return bllist;
         }
 
         public static bool CheckWhitelist(string ip)
