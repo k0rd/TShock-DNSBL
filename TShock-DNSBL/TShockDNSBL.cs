@@ -10,7 +10,7 @@ using Terraria;
 
 namespace TShock_DNSBL
 {
-    [APIVersion(1, 11)]
+    [APIVersion(1, 12)]
     public class Dnsbl : TerrariaPlugin
     {
         internal static string WhitelistPath
