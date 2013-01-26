@@ -77,7 +77,7 @@ namespace TShock_DNSBL
                     {
                         TShock.Utils.ForceKick(TShock.Players[pID],
                                                string.Format("You are listed on the blacklist at {0}.",
-                                                             m_checker.BlackList.VerifiedOnServer));
+                                                             m_checker.BlackList.VerifiedOnServer), true, false);
                         Log.ConsoleInfo(string.Format("{0} was found on the blacklist at {1}", TShock.Players[pID].IP,
                                                       m_checker.BlackList.VerifiedOnServer));
                         e.Handled = true;
