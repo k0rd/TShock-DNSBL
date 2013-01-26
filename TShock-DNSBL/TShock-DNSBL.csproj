@@ -31,21 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HttpServer">
-      <HintPath>..\..\..\..\terraria\1.1.2-test\ServerPlugins\HttpServer.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Data.Sqlite">
-      <HintPath>..\..\..\..\terraria\1.1.2-test\ServerPlugins\Mono.Data.Sqlite.dll</HintPath>
-    </Reference>
-    <Reference Include="MySql.Data">
-      <HintPath>..\..\..\..\terraria\1.1.2-test\ServerPlugins\MySql.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="MySql.Web">
-      <HintPath>..\..\..\..\terraria\1.1.2-test\ServerPlugins\MySql.Web.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\..\terraria\1.1.2-test\ServerPlugins\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -54,10 +39,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="TerrariaServer">
-      <HintPath>..\..\..\..\terraria\1.1.2-test\TerrariaServer.exe</HintPath>
+      <HintPath>DLLS\TerrariaServer.exe</HintPath>
     </Reference>
     <Reference Include="TShockAPI">
-      <HintPath>..\..\..\..\terraria\1.1.2-test\ServerPlugins\TShockAPI.dll</HintPath>
+      <HintPath>DLLS\TShockAPI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
