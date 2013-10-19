@@ -4,13 +4,13 @@ using System.ComponentModel;
 using System.IO;
 using System.Net;
 using System.Text;
-using Hooks;
 using TShockAPI;
 using Terraria;
+using TerrariaApi.Server;
 
 namespace TShock_DNSBL
 {
-    [APIVersion(1, 12)]
+    [ApiVersion(1, 14)]
     public class Dnsbl : TerrariaPlugin
     {
         internal static string WhitelistPath
@@ -32,21 +32,21 @@ namespace TShock_DNSBL
 
         public override void Initialize()
         {
-            ServerHooks.Connect += OnConnect;
+            ServerApi.Hooks.NetGreetPlayer.Register(this, OnConnect);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                ServerHooks.Connect -=OnConnect;
+                ServerApi.Hooks.NetGreetPlayer.Deregister(this, OnConnect);
             }
             base.Dispose(disposing);
         }
 
         public override Version Version
         {
-            get { return new Version("1.0"); }
+            get { return new Version("1.4"); }
         }
 
         public override string Name
@@ -56,7 +56,7 @@ namespace TShock_DNSBL
 
         public override string Author
         {
-            get { return "by k0rd"; }
+            get { return "k0rd"; }
         }
 
         public override string Description
@@ -64,21 +64,21 @@ namespace TShock_DNSBL
             get { return "Proxy blocking using a DNSBL provider"; }
         }
 
-        public void OnConnect(int pID, HandledEventArgs e)
+        public void OnConnect(GreetPlayerEventArgs e)
         {
 
             string[] blProvider = GetDNSBLServer().ToArray();       
-            CheckProxy m_checker= new CheckProxy(TShock.Players[pID].IP,blProvider);
-            if (!CheckWhitelist(TShock.Players[pID].IP))
+            CheckProxy m_checker= new CheckProxy(TShock.Players[e.Who].IP,blProvider);
+            if (!CheckWhitelist(TShock.Players[e.Who].IP))
             {
                 if (m_checker.IPAddr.Valid)
                 {
                     if (m_checker.BlackList.IsListed)
                     {
-                        TShock.Utils.ForceKick(TShock.Players[pID],
+                        TShock.Utils.ForceKick(TShock.Players[e.Who],
                                                string.Format("You are listed on the blacklist at {0}.",
                                                              m_checker.BlackList.VerifiedOnServer), true, false);
-                        Log.ConsoleInfo(string.Format("{0} was found on the blacklist at {1}", TShock.Players[pID].IP,
+                        Log.ConsoleInfo(string.Format("{0} was found on the blacklist at {1}", TShock.Players[e.Who].IP,
                                                       m_checker.BlackList.VerifiedOnServer));
                         e.Handled = true;
                         return;
