@@ -25,21 +25,21 @@ namespace TShock_DNSBL
             : base(game)
         {
 
-            Order = 4;
+            Order = 0;
   
 
         }
 
         public override void Initialize()
         {
-            ServerApi.Hooks.NetGreetPlayer.Register(this, OnConnect);
+            ServerApi.Hooks.ServerConnect.Register(this, OnConnect);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                ServerApi.Hooks.NetGreetPlayer.Deregister(this, OnConnect);
+                ServerApi.Hooks.ServerConnect.Deregister(this, OnConnect);
             }
             base.Dispose(disposing);
         }
@@ -64,7 +64,7 @@ namespace TShock_DNSBL
             get { return "Proxy blocking using a DNSBL provider"; }
         }
 
-        public void OnConnect(GreetPlayerEventArgs e)
+        public void OnConnect(ConnectEventArgs e)
         {
 
             string[] blProvider = GetDNSBLServer().ToArray();       
